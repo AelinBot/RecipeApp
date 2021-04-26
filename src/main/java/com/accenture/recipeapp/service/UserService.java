@@ -1,5 +1,6 @@
 package com.accenture.recipeapp.service;
 
+import com.accenture.recipeapp.entity.User;
 import com.accenture.recipeapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,5 +20,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public User saveUserRegister(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return user;
     }
 }
