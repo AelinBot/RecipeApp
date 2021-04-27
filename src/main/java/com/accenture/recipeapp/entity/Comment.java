@@ -9,12 +9,12 @@ import java.util.Objects;
 public class Comment implements Serializable {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Recipe recipe;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private User user;
 

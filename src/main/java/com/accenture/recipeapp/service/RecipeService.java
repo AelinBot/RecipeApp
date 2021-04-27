@@ -44,9 +44,19 @@ public class RecipeService {
         }
     }
 
-    public Recipe updateRecipe(Recipe recipe) {
+    public Recipe updateRecipe(Recipe recipe, User user) {
+        recipe.setUser(user);
         recipeRepository.save(recipe);
         return recipe;
+    }
+
+    public void deleteRecipeById(Long id) {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Set<Comment> recipeComments = commentRepository.findByRecipe_Id(recipe.getId());
+        for (Comment comment : recipeComments) {
+            commentRepository.delete(comment);
+        }
+        recipeRepository.delete(recipe);
     }
 
     public void deleteRecipe(Recipe recipe) {
