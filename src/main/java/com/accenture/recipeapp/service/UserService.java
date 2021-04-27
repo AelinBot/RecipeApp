@@ -27,4 +27,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return user;
     }
+
+    public boolean userExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public User updateUserPassword(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        return user;
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }
