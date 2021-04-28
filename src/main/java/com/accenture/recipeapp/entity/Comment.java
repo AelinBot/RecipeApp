@@ -67,9 +67,7 @@ public class Comment implements Serializable {
         return recipeComment;
     }
 
-    public void setRecipeComment(boolean recipeLike) {
-        this.recipeComment = recipeComment;
-    }
+    public void setRecipeComment(String recipeComment) { this.recipeComment = recipeComment; }
 
     public Long getId() {
         return id;

@@ -30,6 +30,9 @@ public class Recipe {
         this.comments = Stream.of(comments).collect(Collectors.toSet());
     }
 
+    public Recipe() {
+    }
+
     public Long getId() {
         return id;
     }

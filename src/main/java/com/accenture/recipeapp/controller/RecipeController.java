@@ -1,12 +1,14 @@
 package com.accenture.recipeapp.controller;
 
+import com.accenture.recipeapp.dto.CommentDto;
+import com.accenture.recipeapp.dto.RecipeDto;
 import com.accenture.recipeapp.entity.Comment;
 import com.accenture.recipeapp.entity.Recipe;
 import com.accenture.recipeapp.entity.User;
+import com.accenture.recipeapp.mapper.MapCommentDtoToEntity;
+import com.accenture.recipeapp.mapper.MapRecipeDtoToEntity;
 import com.accenture.recipeapp.service.CommentService;
 import com.accenture.recipeapp.service.RecipeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,12 @@ public class RecipeController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private MapCommentDtoToEntity mapCommentDtoToEntity;
+
+    @Autowired
+    private MapRecipeDtoToEntity mapRecipeDtoToEntity;
 
     @GetMapping("/")
     public String getAllRecipes() {
@@ -52,8 +60,8 @@ public class RecipeController {
     }
 
     @PostMapping()
-    public String postRecipe(@ModelAttribute Recipe recipe, @AuthenticationPrincipal User user) throws IOException {
-        recipeService.saveRecipe(recipe, user);
+    public String postRecipe(@ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user) throws IOException {
+        recipeService.saveRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
         return "redirect:/recipe/";
     }
 
@@ -66,12 +74,12 @@ public class RecipeController {
     }
 
     @PostMapping("/update/{recipeId}")
-    public String updateRecipe(@PathVariable("recipeId") Long recipeId, @ModelAttribute Recipe recipe, @AuthenticationPrincipal User user, @RequestParam("button") String command) throws IOException {
-        recipe.setId(recipeId);
+    public String updateRecipe(@PathVariable("recipeId") Long recipeId, @ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user, @RequestParam("button") String command) throws IOException {
+        recipeDto.setId(recipeId);
         recipeValidation(recipeId, user.getId());
 
         if (command.equals("update")) {
-            recipeService.updateRecipe(recipe, user);
+            recipeService.updateRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
         }
 
         return "redirect:/recipe/" + recipeId;
@@ -85,13 +93,13 @@ public class RecipeController {
     }
 
     @PostMapping("/{recipeId}/comment")
-    public String addComment(@PathVariable("recipeId") Long recipeId, @ModelAttribute Comment comment, @AuthenticationPrincipal User user) {
+    public String addComment(@PathVariable("recipeId") Long recipeId, @ModelAttribute CommentDto commentDto, @AuthenticationPrincipal User user) {
         if (user == null) {
             return "redirect:/login";
         }
-        comment.setRecipe(recipeService.getRecipeById(recipeId));
-        comment.setUser(user);
-        commentService.saveComment(comment);
+        commentDto.setRecipe(recipeService.getRecipeById(recipeId));
+        commentDto.setUser(user);
+        commentService.saveComment(mapCommentDtoToEntity.mapCommentToEntity(commentDto));
         return "redirect:/recipe/" + recipeId;
     }
 

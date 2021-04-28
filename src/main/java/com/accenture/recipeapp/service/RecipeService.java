@@ -34,14 +34,9 @@ public class RecipeService {
     }
 
     public Recipe saveRecipe(Recipe recipe, User user) {
-        try {
-            recipe.setUser(user);
-            recipeRepository.save(recipe);
-            return recipe;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        recipe.setUser(user);
+        recipeRepository.save(recipe);
+        return recipe;
     }
 
     public Recipe updateRecipe(Recipe recipe, User user) {

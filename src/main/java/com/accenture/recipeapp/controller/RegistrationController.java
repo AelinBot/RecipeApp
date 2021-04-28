@@ -1,6 +1,7 @@
 package com.accenture.recipeapp.controller;
 
-import com.accenture.recipeapp.entity.User;
+import com.accenture.recipeapp.dto.UserDto;
+import com.accenture.recipeapp.mapper.MapUserDtoToEntity;
 import com.accenture.recipeapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,14 +17,17 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MapUserDtoToEntity mapUserDtoToEntity;
+
     @GetMapping
     public String registerPage() {
         return "register";
     }
 
     @PostMapping
-    public String addUser(@ModelAttribute User user) {
-        userService.saveUserRegister(user);
+    public String addUser(@ModelAttribute UserDto userDto) {
+        userService.saveUserRegister(mapUserDtoToEntity.mapUserToEntity(userDto));
         return "redirect:/login";
     }
 }
