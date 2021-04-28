@@ -27,6 +27,9 @@ public class RegistrationController {
 
     @PostMapping
     public String addUser(@ModelAttribute UserDto userDto) {
+        if(userService.userExists(mapUserDtoToEntity.mapUserToEntity(userDto).getUsername())) {
+            return "redirect:/login";
+        }
         userService.saveUserRegister(mapUserDtoToEntity.mapUserToEntity(userDto));
         return "redirect:/login";
     }

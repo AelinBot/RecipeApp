@@ -1,19 +1,26 @@
 package com.accenture.recipeapp.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "recipe_comment")
 public class Comment implements Serializable {
 
-    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Recipe recipe;
 
-    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private User user;
@@ -23,14 +30,6 @@ public class Comment implements Serializable {
     private Long id;
 
     private String recipeComment;
-
-    public Comment(User user, String recipeComment) {
-        this.user = user;
-        this.recipeComment = recipeComment;
-    }
-
-    public Comment() {
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -45,35 +44,5 @@ public class Comment implements Serializable {
     @Override
     public int hashCode() {
         return(Objects.hash(recipe.getId(), user.getId(), recipeComment));
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getRecipeComment() {
-        return recipeComment;
-    }
-
-    public void setRecipeComment(String recipeComment) { this.recipeComment = recipeComment; }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

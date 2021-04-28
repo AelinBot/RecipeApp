@@ -36,7 +36,7 @@ public class RecipeController {
     @Autowired
     private MapRecipeDtoToEntity mapRecipeDtoToEntity;
 
-    @GetMapping("/")
+    @GetMapping("/recipes")
     public String getAllRecipes() {
         return "recipes";
     }

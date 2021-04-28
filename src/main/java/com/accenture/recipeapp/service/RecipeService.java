@@ -5,7 +5,6 @@ import com.accenture.recipeapp.entity.Recipe;
 import com.accenture.recipeapp.entity.User;
 import com.accenture.recipeapp.repository.CommentRepository;
 import com.accenture.recipeapp.repository.RecipeRepository;
-import com.accenture.recipeapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,6 @@ public class RecipeService {
 
     @Autowired
     private RecipeRepository recipeRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -51,10 +47,6 @@ public class RecipeService {
         for (Comment comment : recipeComments) {
             commentRepository.delete(comment);
         }
-        recipeRepository.delete(recipe);
-    }
-
-    public void deleteRecipe(Recipe recipe) {
         recipeRepository.delete(recipe);
     }
 
