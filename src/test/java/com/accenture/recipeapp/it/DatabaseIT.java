@@ -1,9 +1,12 @@
 package com.accenture.recipeapp.it;
 
+import com.accenture.recipeapp.controller.RecipeController;
+import com.accenture.recipeapp.dto.RecipeDto;
 import com.accenture.recipeapp.entity.Comment;
 import com.accenture.recipeapp.entity.Recipe;
+import com.accenture.recipeapp.entity.User;
 import com.accenture.recipeapp.repository.CommentRepository;
-import com.accenture.recipeapp.repository.RecipeRepository;
+import com.accenture.recipeapp.security.SecurityConfig;
 import com.accenture.recipeapp.service.RecipeService;
 import com.accenture.recipeapp.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -11,13 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class DatabaseIT {
+class DatabaseIT {
 
     @Autowired
     UserService userService;
@@ -26,7 +28,13 @@ public class DatabaseIT {
     RecipeService recipeService;
 
     @Autowired
+    RecipeController recipeController;
+
+    @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    SecurityConfig securityConfig;
 
     @Test
     void getRecipeTest() {
@@ -47,8 +55,21 @@ public class DatabaseIT {
 
     @Test
     void getCommentsByRecipeIdTest() {
-        Set<Comment> comments = commentRepository.findByRecipe_Id(8L);
+        Set<Comment> comments = commentRepository.findByRecipeId(8L);
 
         assertEquals(1, comments.size());
+    }
+
+    @Test
+    void updateRecipeTest() {
+        RecipeDto newRecipe = new RecipeDto();
+        newRecipe.setTitle("New title");
+        newRecipe.setRecipeBody("New body");
+
+        User user = userService.getUserByUsername("panda");
+
+        recipeController.updateRecipe(1L, newRecipe, user);
+        Recipe recipe = recipeService.getRecipeById(1L);
+        assertEquals("New title", recipe.getTitle());
     }
 }

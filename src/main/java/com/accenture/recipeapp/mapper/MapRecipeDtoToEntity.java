@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapRecipeDtoToEntity {
     public Recipe mapRecipeToEntity(RecipeDto recipeDto) {
-        Recipe recipeEntity = new Recipe();
+        var recipeEntity = new Recipe();
         recipeEntity.setId(recipeDto.getId());
         recipeEntity.setUser(recipeDto.getUser());
         recipeEntity.setTitle(recipeDto.getTitle());

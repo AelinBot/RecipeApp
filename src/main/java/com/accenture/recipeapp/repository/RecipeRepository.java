@@ -9,5 +9,5 @@ import java.util.Set;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    Set<Recipe> findByUser_Id(Long userId);
+    Set<Recipe> findByUserId(Long userId);
 }

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecipeController.class)
-public class RecipeControllerTest {
+class RecipeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapCommentDtoToEntity {
     public Comment mapCommentToEntity(CommentDto commentDto) {
-        Comment commentEntity = new Comment();
+        var commentEntity = new Comment();
         commentEntity.setId(commentDto.getId());
         commentEntity.setRecipe(commentDto.getRecipe());
         commentEntity.setUser(commentDto.getUser());

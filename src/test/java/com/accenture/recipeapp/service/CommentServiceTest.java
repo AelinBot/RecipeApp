@@ -17,7 +17,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CommentServiceTest {
+class CommentServiceTest {
 
     @Mock
     CommentRepository commentRepository;
@@ -46,12 +46,6 @@ public class CommentServiceTest {
         commentService.deleteComment(TestData.TEST_ID);
         verify(commentRepository, atLeastOnce()).deleteById(anyLong());
     }
-
-    //@Test
-    //    void getBookByIdTest() {
-    //        when(bookRatingRepository.findById(any(Long.class))).thenReturn(Optional.of(bookRating));
-    //        assertEquals(bookRating, bookRatingService.getBookRatingById(TestData.TEST_ID));
-    //    }
 
     @Test
     void getCommentByIdTest() {

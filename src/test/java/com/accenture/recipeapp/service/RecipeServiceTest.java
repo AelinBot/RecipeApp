@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
-public class RecipeServiceTest {
+class RecipeServiceTest {
 
     @Mock
     RecipeRepository recipeRepository;
@@ -35,8 +35,6 @@ public class RecipeServiceTest {
 
     private Recipe recipe;
     private Comment comment;
-    private Set<Recipe> recipeSet;
-    private List<Recipe> recipeList;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +42,6 @@ public class RecipeServiceTest {
 
         recipe = TestData.getRecipe();
         comment = TestData.getComment();
-        recipeSet = TestData.getRecipes();
     }
 
     @Test
@@ -70,7 +67,7 @@ public class RecipeServiceTest {
 
     @Test
     void updateRecipeTest() {
-        Recipe savedRecipe = recipeService.updateRecipe(recipe, recipe.getUser());
+        Recipe savedRecipe = recipeService.saveRecipe(recipe, recipe.getUser());
         assertEquals(recipe.getTitle(), savedRecipe.getTitle());
         assertEquals(recipe.getUser(), savedRecipe.getUser());
         assertEquals(recipe.getRecipeBody(), savedRecipe.getRecipeBody());
@@ -79,7 +76,7 @@ public class RecipeServiceTest {
     @Test
     void deleteRecipeByIdTest() {
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
-        when(commentRepository.findByRecipe_Id(anyLong())).thenReturn(new HashSet<>(Collections.singletonList(comment)));
+        when(commentRepository.findByRecipeId(anyLong())).thenReturn(new HashSet<>(Collections.singletonList(comment)));
 
         recipeService.deleteRecipeById(TestData.TEST_ID);
         verify(recipeRepository, atLeastOnce()).delete(any(Recipe.class));

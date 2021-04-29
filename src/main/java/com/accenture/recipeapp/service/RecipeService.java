@@ -27,10 +27,12 @@ public class RecipeService {
     }
 
     public Set<Recipe> getAllRecipeByUser(Long id) {
-        return recipeRepository.findByUser_Id(id);
+        return recipeRepository.findByUserId(id);
     }
 
-    public List<Recipe> getAllRecipes() { return recipeRepository.findAll(); }
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
 
     public Recipe saveRecipe(Recipe recipe, User user) {
         recipe.setUser(user);
@@ -38,20 +40,14 @@ public class RecipeService {
         return recipe;
     }
 
-    public Recipe updateRecipe(Recipe recipe, User user) {
-        recipe.setUser(user);
-        recipeRepository.save(recipe);
-        return recipe;
-    }
-
     public void deleteRecipeById(Long id) {
-        Recipe recipe = recipeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        Set<Comment> recipeComments = commentRepository.findByRecipe_Id(recipe.getId());
+        var recipe = recipeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Set<Comment> recipeComments = commentRepository.findByRecipeId(recipe.getId());
         recipeComments.forEach(recipeComment -> commentRepository.delete(recipeComment));
         recipeRepository.delete(recipe);
     }
 
     public Set<Comment> getAllComments(Long id) {
-        return commentRepository.findByRecipe_Id(id);
+        return commentRepository.findByRecipeId(id);
     }
 }

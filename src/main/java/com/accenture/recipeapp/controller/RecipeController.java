@@ -36,6 +36,9 @@ public class RecipeController {
     @Autowired
     private MapRecipeDtoToEntity mapRecipeDtoToEntity;
 
+    String recipeString = "recipe";
+    String recipeRedirect = "redirect:/recipe/";
+
     @GetMapping("/all")
     public String getAllRecipes(Model model, @AuthenticationPrincipal User user) {
         List<Recipe> recipeList = recipeService.getAllRecipes();
@@ -47,13 +50,13 @@ public class RecipeController {
     @GetMapping("/{recipeId}")
     public String recipePage(@PathVariable("recipeId") Long recipeId, Model model, @AuthenticationPrincipal User user) {
 
-        Recipe recipe = recipeService.getRecipeById(recipeId);
+        var recipe = recipeService.getRecipeById(recipeId);
         Set<Comment> recipeComments = recipeService.getAllComments(recipeId);
 
-        model.addAttribute("recipe", recipe);
+        model.addAttribute(recipeString, recipe);
         model.addAttribute("recipeComments", recipeComments);
         model.addAttribute("user", user);
-        return "recipe";
+        return recipeString;
     }
 
     @GetMapping("/new")
@@ -70,8 +73,8 @@ public class RecipeController {
 
     @GetMapping("/update/{recipeId}")
     public String editRecipe(Model model, @PathVariable("recipeId") Long recipeId, @AuthenticationPrincipal User user) {
-        Recipe recipe = recipeService.getRecipeById(recipeId);
-        model.addAttribute("recipe", recipe);
+        var recipe = recipeService.getRecipeById(recipeId);
+        model.addAttribute(recipeString, recipe);
         model.addAttribute("user", user);
         return "edit-recipe";
     }
@@ -81,9 +84,9 @@ public class RecipeController {
         recipeDto.setId(recipeId);
         recipeValidation(recipeId, user.getId());
 
-        recipeService.updateRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
+        recipeService.saveRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
 
-        return "redirect:/recipe/" + recipeId;
+        return recipeRedirect + recipeId;
     }
 
     @GetMapping("/delete/{recipeId}")
@@ -101,21 +104,21 @@ public class RecipeController {
         commentDto.setRecipe(recipeService.getRecipeById(recipeId));
         commentDto.setUser(user);
         commentService.saveComment(mapCommentDtoToEntity.mapCommentToEntity(commentDto));
-        return "redirect:/recipe/" + recipeId;
+        return recipeRedirect + recipeId;
     }
 
     @GetMapping("/{recipeId}/comment/delete/{commentId}")
     public String deleteComment(@PathVariable("recipeId") Long recipeId, @PathVariable("commentId") Long commentId, @AuthenticationPrincipal User user) {
-        Comment commentValidation = commentService.getCommentById(commentId);
+        var commentValidation = commentService.getCommentById(commentId);
         if (!(user.getId()).equals(commentValidation.getUser().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         commentService.deleteComment(commentId);
-        return "redirect:/recipe/" + recipeId;
+        return recipeRedirect + recipeId;
     }
 
     private void recipeValidation(Long recipeId, Long userId) {
-        Recipe recipeTest = recipeService.getRecipeById(recipeId);
+        var recipeTest = recipeService.getRecipeById(recipeId);
         if (!recipeTest.getUser().getId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
