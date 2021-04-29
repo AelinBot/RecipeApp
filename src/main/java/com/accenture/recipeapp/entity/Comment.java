@@ -30,19 +30,4 @@ public class Comment implements Serializable {
     private Long id;
 
     private String recipeComment;
-
-    @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(!(o instanceof Comment)) return false;
-        Comment that = (Comment) o;
-        return Objects.equals(recipe.getId(), that.recipe.getId()) &&
-                Objects.equals(user.getId(), that.user.getId()) &&
-                Objects.equals(recipeComment, that.recipeComment);
-    }
-
-    @Override
-    public int hashCode() {
-        return(Objects.hash(recipe.getId(), user.getId(), recipeComment));
-    }
 }

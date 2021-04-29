@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Nav Bar -->
+<div th:insert="fragments/navbar.html"></div>
+
+<div class="your_recipes">
+    <h1>Your recipes</h1>
+    <p th:if="${recipes.empty}">No recipes submitted..</p>
+    <table th:unless="${recipes.empty}">
+        <tbody>
+        <tr th:each="recipe : ${recipes}">
+            <td>
+                <a th:text="${recipe.title}" th:href="@{/recipe/{recipeId}(recipeId = ${recipe.id})}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="change_password">
+    <h1>Change your password</h1>
+    <form role="form" th:object="${user}" th:action="@{/user/update/password}" method="POST">
+        <input class="form-control" type="password" name="password" value="" placeholder="Choose your new password">
+        <input type="submit" class="btn btn-primary" value="Save Changes">
+        <input type="reset" class="btn btn-secondary" value="Cancel">
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+</body>
+</html>

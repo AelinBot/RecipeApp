@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -36,8 +36,11 @@ public class RecipeController {
     @Autowired
     private MapRecipeDtoToEntity mapRecipeDtoToEntity;
 
-    @GetMapping("/recipes")
-    public String getAllRecipes() {
+    @GetMapping("/all")
+    public String getAllRecipes(Model model, @AuthenticationPrincipal User user) {
+        List<Recipe> recipeList = recipeService.getAllRecipes();
+        model.addAttribute("user", user);
+        model.addAttribute("recipes", recipeList);
         return "recipes";
     }
 
@@ -60,9 +63,9 @@ public class RecipeController {
     }
 
     @PostMapping()
-    public String postRecipe(@ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user) throws IOException {
+    public String postRecipe(@ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user) {
         recipeService.saveRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
-        return "redirect:/recipe/";
+        return "redirect:/recipe/all";
     }
 
     @GetMapping("/update/{recipeId}")
@@ -74,13 +77,11 @@ public class RecipeController {
     }
 
     @PostMapping("/update/{recipeId}")
-    public String updateRecipe(@PathVariable("recipeId") Long recipeId, @ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user, @RequestParam("button") String command) throws IOException {
+    public String updateRecipe(@PathVariable("recipeId") Long recipeId, @ModelAttribute RecipeDto recipeDto, @AuthenticationPrincipal User user) {
         recipeDto.setId(recipeId);
         recipeValidation(recipeId, user.getId());
 
-        if (command.equals("update")) {
-            recipeService.updateRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
-        }
+        recipeService.updateRecipe(mapRecipeDtoToEntity.mapRecipeToEntity(recipeDto), user);
 
         return "redirect:/recipe/" + recipeId;
     }
@@ -89,7 +90,7 @@ public class RecipeController {
     public String deleteRecipe(@PathVariable("recipeId") Long recipeId, @AuthenticationPrincipal User user) {
         recipeValidation(recipeId, user.getId());
         recipeService.deleteRecipeById(recipeId);
-        return "redirect:/recipe/";
+        return "redirect:/recipe/all";
     }
 
     @PostMapping("/{recipeId}/comment")

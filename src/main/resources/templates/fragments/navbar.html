@@ -18,10 +18,10 @@
                     <a class="nav-link" th:if="${user ne null}" th:href="@{/user/profile}">User Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/recipes}">Recipes</a>
+                    <a class="nav-link" th:href="@{/recipe/all}">Recipes</a>
                 </li>
                 <li class="nav-item" th:if="${user ne null}">
-                    <a class="nav-link" th:href="@{/new}">Create a recipe</a>
+                    <a class="nav-link" th:href="@{/recipe/new}">Create a recipe</a>
                 </li>
                 <li class="nav-item" th:unless="${user ne null}">
                     <a class="nav-link" th:href="@{/login}">Login</a>

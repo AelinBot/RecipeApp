@@ -13,9 +13,7 @@ public class HomeController {
 
     @GetMapping
     public String homePage(Model model, @AuthenticationPrincipal User user) {
-        if(user != null) {
-            model.addAttribute("username", user.getUsername());
-        }
+        model.addAttribute("user", user);
         return "home";
     }
 }

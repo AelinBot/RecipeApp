@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -29,6 +30,8 @@ public class RecipeService {
         return recipeRepository.findByUser_Id(id);
     }
 
+    public List<Recipe> getAllRecipes() { return recipeRepository.findAll(); }
+
     public Recipe saveRecipe(Recipe recipe, User user) {
         recipe.setUser(user);
         recipeRepository.save(recipe);
@@ -44,9 +47,7 @@ public class RecipeService {
     public void deleteRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         Set<Comment> recipeComments = commentRepository.findByRecipe_Id(recipe.getId());
-        for (Comment comment : recipeComments) {
-            commentRepository.delete(comment);
-        }
+        recipeComments.forEach(recipeComment -> commentRepository.delete(recipeComment));
         recipeRepository.delete(recipe);
     }
 

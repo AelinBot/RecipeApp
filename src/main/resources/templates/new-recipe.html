@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Recipe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Nav Bar -->
+<div th:insert="fragments/navbar.html"></div>
+
+<form th:action="@{/recipe}" method="POST" enctype="multipart/form-data">
+    <input class="form-control form-control-lg addrecipe-title" type="text" name="title" placeholder="Recipe title">
+
+    <textarea id="recipe" name="recipeBody" class="form-control" rows="3">Write your recipe here!</textarea>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="https://cdn.tiny.cloud/1/dexkp5gsbckfbbufgmqqy736xa0e9dx83uqdmb5f6wpvpbmn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: "#recipe",
+        menubar: false,
+        plugins: "lists",
+        toolbar: "undo redo | h1 h2 h3 | bold italic | numlist bullist"
+    });
+</script>
+
+</body>
+</html>
